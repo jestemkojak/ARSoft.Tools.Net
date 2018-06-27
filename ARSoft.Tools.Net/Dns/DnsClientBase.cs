@@ -343,8 +343,8 @@ namespace ARSoft.Tools.Net.Dns
 
 			IPEndPoint endPoint = new IPEndPoint(nameServer, _port);
 
-			try
-			{
+            try
+            {
 				if (tcpClient == null)
 				{
 					tcpClient = new TcpClient(nameServer.AddressFamily)
@@ -423,8 +423,8 @@ namespace ARSoft.Tools.Net.Dns
 				var endpointInfo = endpointInfos[i];
 				QueryResponse resultData = null;
 
-				try
-				{
+                try
+                {
 					resultData = await (sendByTcp ? QueryByTcpAsync(endpointInfo.ServerAddress, messageData, messageLength, null, null, token) : QuerySingleResponseByUdpAsync(endpointInfo, messageData, messageLength, token));
 
 					if (resultData == null)
@@ -792,7 +792,7 @@ namespace ARSoft.Tools.Net.Dns
 						}
 					).ToList();
 			}
-			return endpointInfos;
+            return endpointInfos;
 		}
 
 		private static bool IsIPv6Enabled { get; } = IsAnyIPv6Configured();
@@ -801,10 +801,12 @@ namespace ARSoft.Tools.Net.Dns
 
 		private static bool IsAnyIPv6Configured()
 		{
-			return NetworkInterface.GetAllNetworkInterfaces()
-				.Where(n => (n.OperationalStatus == OperationalStatus.Up) && (n.NetworkInterfaceType != NetworkInterfaceType.Loopback))
-				.SelectMany(n => n.GetIPProperties().UnicastAddresses.Select(a => a.Address))
-				.Any(a => !IPAddress.IsLoopback(a) && (a.AddressFamily == AddressFamily.InterNetworkV6) && !a.IsIPv6LinkLocal && !a.IsIPv6Teredo && !a.GetNetworkAddress(96).Equals(_ipvMappedNetworkAddress));
+		    return NetworkInterface.GetAllNetworkInterfaces()
+		        .Where(n => (n.OperationalStatus == OperationalStatus.Up) &&
+		                    (n.NetworkInterfaceType != NetworkInterfaceType.Loopback))
+		        .SelectMany(n => n.GetIPProperties().UnicastAddresses.Select(a => a.Address))
+		        .Any(a => !IPAddress.IsLoopback(a) && (a.AddressFamily == AddressFamily.InterNetworkV6) &&
+		                  !a.IsIPv6LinkLocal && !a.IsIPv6Teredo && !a.GetNetworkAddress(96).Equals(_ipvMappedNetworkAddress) && !a.Is6To4());
 		}
 	}
 }

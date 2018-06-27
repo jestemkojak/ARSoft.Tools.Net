@@ -262,6 +262,17 @@ namespace ARSoft.Tools.Net
 			throw new ArgumentOutOfRangeException(nameof(ipAddress), "The given ip address is not configured on the local system");
 		}
 
+	    /// <summary>
+	    ///   Returns a value indicating whether an ip address has 6to4 prefix
+	    /// </summary>
+	    /// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
+	    /// <returns> true, if the given address is a 6to4 address; otherwise, false </returns>
+        public static bool Is6To4(this IPAddress ipAddress)
+	    {
+	        return ipAddress.AddressFamily == AddressFamily.InterNetworkV6 &&
+	               ipAddress.GetNetworkAddress(16).Equals(IPAddress.Parse("2002::"));
+	    }
+
 		private static byte ReverseBitOrder(byte value)
 		{
 			byte result = 0;
